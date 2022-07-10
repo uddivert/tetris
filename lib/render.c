@@ -2,64 +2,82 @@
 // drawing a circle using
 // OpenGL
 #include<stdio.h>
+#include <stdlib.h>
 #include<GL/glut.h>
-#include<math.h>
-#define pi 3.142857
-  
-// function to initialize
-void myInit (void)
+#include "font.h"
+
+
+void display(void)
 {
-    // making background color black as first 
-    // 3 arguments all are 0.0
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-      
-    // making picture color green (in RGB mode), as middle argument is 1.0
-    glColor3f(0.0, 1.0, 0.0);
-      
-    // breadth of picture boundary is 1 pixel
-    glPointSize(1.0);
-    glMatrixMode(GL_PROJECTION); 
-    glLoadIdentity();
-      
-    // setting window dimension in X- and Y- direction
-    gluOrtho2D(-780, 780, -420, 420);
-}
-  
-void display (void) 
-{
+    makeRasterFont();
+    GLfloat white[3] = { 1.0, 1.0, 1.0 };
+
     glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_POINTS);
-    float x, y, i;
-      
-    // iterate y up to 2*pi, i.e., 360 degree
-    // with small increment in angle as
-    // glVertex2i just draws a point on specified co-ordinate
-    for ( i = 0; i < (2 * pi); i += 0.001)
-    {
-        // let 200 is radius of circle and as,
-        // circle is defined as x=r*cos(i) and y=r*sin(i)
-        x = 200 * cos(i);
-        y = 200 * sin(i);
-          
-        glVertex2i(x, y);
-    }
-    glEnd();
-    glFlush();
+    glColor3fv(white);
+
+    glRasterPos2i(20, 60);
+
+    printString("I GUESS I KINDA MISS U");
+    glRasterPos2i(20, 40);
+    printString("FROM UR SECRET ADMIRER");
+    glFlush ();
 }
-  
-int main (int argc, char** argv)
+
+void reshape(int w, int h)
+{
+    glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho (0.0, w, 0.0, h, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void keyboard(unsigned char key, int x, int y)
+{
+    switch (key) {
+        case 27:
+            exit(0);
+    }
+}
+
+int initialize(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(300, 100);
+    glutInitWindowPosition (100, 100);
+    glutCreateWindow(argv[0]);
+    init();
+    glutReshapeFunc(reshape);
+    glutKeyboardFunc(keyboard);
+    glutDisplayFunc(display);
+    glutMainLoop();
+    return 0;
+}
+/*
+void display (void) 
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    renderBitmapString(0,0,0, GLUT_BITMAP_9_BY_15, "hello world");;
+    glEnd();
+    glutSwapBuffers();
+}
+  
+int initialize(int argc, char** argv)
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE| GLUT_RGB);
       
     // giving window size in X- and Y- direction
-    glutInitWindowSize(1366, 768);
-    glutInitWindowPosition(0, 0);
-      
+    glutInitWindowSize((glutGet(GLUT_SCREEN_WIDTH))/2, glutGet(GLUT_SCREEN_HEIGHT)/2);
+    glutInitWindowPosition(600,200);
+
     // Giving name to window
     glutCreateWindow("Circle Drawing");
-    myInit();
       
     glutDisplayFunc(display);
     glutMainLoop();
+
+    return 0;
 }
+*/
